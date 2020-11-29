@@ -2,21 +2,26 @@ package interfaz;
 
 import java.util.Arrays;
 import java.util.Date;
+import javax.swing.JOptionPane;
 import javax.swing.JSpinner;
 import javax.swing.table.DefaultTableModel;
+import modelo.Ciclista;
 import modelo.Rutina;
 
 public class VisualizarDatos extends javax.swing.JDialog {
+    private final java.awt.Frame frame;
 
     /**
      * Inicia un nuevo JDialog para visualizar los datos registrados hasta el momento.
      */
     public VisualizarDatos(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
+        frame = parent;
         initComponents();
         this.setTitle("Visualizar datos");
-        this.setLocationRelativeTo(null);
+        this.setLocationRelativeTo(parent);
         fecha.setEditor(new JSpinner.DateEditor(fecha,"dd/MM/yyyy"));
+        this.table.setEnabled(false);
     }
     
     /**
@@ -34,6 +39,7 @@ public class VisualizarDatos extends javax.swing.JDialog {
         jScrollPane1 = new javax.swing.JScrollPane();
         table = new javax.swing.JTable();
         todasFechas = new javax.swing.JCheckBox();
+        hint = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setResizable(false);
@@ -63,31 +69,42 @@ public class VisualizarDatos extends javax.swing.JDialog {
 
             },
             new String [] {
-                "Fecha", "ID Ciclista", "Tiempo 1", "Tiempo 2", "Tiempo 3"
+                "Fecha", "ID Ciclista", "Tiempo 1", "Tiempo 2", "Tiempo 3", "Cumple nivel"
             }
         ));
+        table.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tableMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(table);
 
         todasFechas.setText("Todas las fechas");
+
+        hint.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+        hint.setText(" ");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel1)
-                .addGap(18, 18, 18)
-                .addComponent(fecha, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(todasFechas)
-                .addGap(23, 23, 23)
-                .addComponent(visualizarButton)
+                .addContainerGap()
+                .addComponent(jScrollPane1)
+                .addContainerGap())
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(38, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(hint)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addGap(18, 18, 18)
+                        .addComponent(fecha, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(todasFechas)
+                        .addGap(23, 23, 23)
+                        .addComponent(visualizarButton)))
                 .addGap(30, 30, 30))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(50, 50, 50)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 470, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(50, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -98,9 +115,11 @@ public class VisualizarDatos extends javax.swing.JDialog {
                     .addComponent(jLabel1)
                     .addComponent(fecha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(todasFechas))
+                .addGap(14, 14, 14)
+                .addComponent(hint)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 337, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(9, Short.MAX_VALUE))
         );
 
         pack();
@@ -111,25 +130,36 @@ public class VisualizarDatos extends javax.swing.JDialog {
      */
     private void visualizarButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_visualizarButtonActionPerformed
         Date d = (Date)fecha.getValue();
-        String f = String.valueOf(d.getYear()+1900)+"-";
+        String f = String.valueOf(d.getDate())+"-";
         if(d.getMonth() < 9){
             f += "0"+String.valueOf(d.getMonth()+1);
         }
         else {
             f += String.valueOf(d.getMonth()+1);
         }
-        f += "-"+String.valueOf(d.getDate());
+        f += "-"+String.valueOf(d.getYear()+1900);
         DefaultTableModel tblModel = (DefaultTableModel)table.getModel();
         tblModel.setRowCount(0);
         for (String linea : Rutina.rutinas){
             String[] data = linea.split(",");
-            String[] df = Arrays.copyOfRange(data, 0, 5);
+            if (data[5].equals("0")){
+                data[5] = "Sí";
+            }
+            else {
+                data[5] = "No";
+            }
             if (todasFechas.isSelected()){
-                tblModel.addRow(df);
+                tblModel.addRow(data);
             }
             else if (data[0].equals(f)){
-                tblModel.addRow(df);
+                tblModel.addRow(data);
             }
+        }
+        if (table.getRowCount() > 0){
+            hint.setText("Seleccione el ID de un ciclista para poder visualizar su información.");
+        }
+        else {
+            hint.setText("");
         }
         todasFechas.setSelected(false);
     }//GEN-LAST:event_visualizarButtonActionPerformed
@@ -137,8 +167,24 @@ public class VisualizarDatos extends javax.swing.JDialog {
     private void fechaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_fechaMouseClicked
     }//GEN-LAST:event_fechaMouseClicked
 
+    private void tableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableMouseClicked
+        int row = table.rowAtPoint(evt.getPoint());
+        int col = table.columnAtPoint(evt.getPoint());
+        if (col == 1){
+            String celda = (String) table.getValueAt(row, col);
+            try {
+                new InformacionCiclista(frame, true, Ciclista.ciclistas.get(Integer.parseInt(celda))).setVisible(true);
+            }
+            catch (Exception e){
+                JOptionPane.showMessageDialog(this, "Ciclista no encontrado.");
+            }
+        }
+        System.out.println();
+    }//GEN-LAST:event_tableMouseClicked
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JSpinner fecha;
+    private javax.swing.JLabel hint;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable table;

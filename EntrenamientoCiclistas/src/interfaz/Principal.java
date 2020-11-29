@@ -3,7 +3,6 @@ package interfaz;
 import java.awt.Color;
 import java.io.IOException;
 import javax.swing.JButton;
-import modelo.Ciclista;
 
 public class Principal extends javax.swing.JFrame {
 
@@ -147,7 +146,7 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_visualizarDatosActionPerformed
 
     private void salirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_salirActionPerformed
-        data.Data.actualizarCiclistas(Ciclista.ciclistas);
+        data.Data.actualizarCiclistas();
         this.dispose();
     }//GEN-LAST:event_salirActionPerformed
 
@@ -163,7 +162,7 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_formWindowClosed
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
-        data.Data.actualizarCiclistas(Ciclista.ciclistas);
+        data.Data.actualizarCiclistas();
     }//GEN-LAST:event_formWindowClosing
 
     public static void main(String args[]) {
@@ -196,12 +195,14 @@ public class Principal extends javax.swing.JFrame {
             Comentar la línea 202
             Descomentar la línea 203
             Descomentar la línea 204
+            Descomentar la línea 205
             Ejecutar la aplicación y cerrarla
         NO OLVIDAR revertir las líneas modificadas luego
         */
-        Ciclista.ciclistas = data.Data.cargarCiclistas();
-//        Ciclista.ciclistas = new java.util.HashMap<>();
-//        data.Data.actualizarCiclistas(Ciclista.ciclistas);
+        data.Data.cargarCiclistas();
+//        modelo.Ciclista.idAtletas = new java.util.HashMap<>();
+//        modelo.Ciclista.ciclistas = new java.util.HashMap<>();
+//        data.Data.actualizarCiclistas();
         java.awt.EventQueue.invokeLater(() -> {
             new Principal().setVisible(true);
         });

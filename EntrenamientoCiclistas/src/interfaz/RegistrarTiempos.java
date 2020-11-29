@@ -20,7 +20,7 @@ public class RegistrarTiempos extends javax.swing.JDialog {
         frame = parent;
         initComponents();
         this.setTitle("Registrar tiempos");
-        this.setLocationRelativeTo(null);
+        this.setLocationRelativeTo(parent);
         numeroCiclista.setText(""+numCiclista);
 //        f = fecha;
         this.fecha.setText(fecha);
@@ -174,7 +174,7 @@ public class RegistrarTiempos extends javax.swing.JDialog {
         jLabel5.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jLabel5.setText("Segundos:");
 
-        minuto1.setModel(new javax.swing.SpinnerNumberModel(1, 0, 3, 1));
+        minuto1.setModel(new javax.swing.SpinnerNumberModel(0, 0, 3, 1));
 
         segundo1.setModel(new javax.swing.SpinnerNumberModel(0, 0, 59, 1));
 
@@ -226,7 +226,7 @@ public class RegistrarTiempos extends javax.swing.JDialog {
         jLabel10.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jLabel10.setText("Segundos:");
 
-        minuto2.setModel(new javax.swing.SpinnerNumberModel(1, 0, 3, 1));
+        minuto2.setModel(new javax.swing.SpinnerNumberModel(0, 0, 3, 1));
 
         segundo2.setModel(new javax.swing.SpinnerNumberModel(0, 0, 59, 1));
 
@@ -267,7 +267,7 @@ public class RegistrarTiempos extends javax.swing.JDialog {
         jLabel14.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jLabel14.setText("Segundos:");
 
-        minuto3.setModel(new javax.swing.SpinnerNumberModel(1, 0, 3, 1));
+        minuto3.setModel(new javax.swing.SpinnerNumberModel(0, 0, 3, 1));
 
         segundo3.setModel(new javax.swing.SpinnerNumberModel(0, 0, 59, 1));
 
@@ -389,19 +389,32 @@ public class RegistrarTiempos extends javax.swing.JDialog {
     private void guardarButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_guardarButtonActionPerformed
         try {
             int id = Integer.parseInt(this.identificacion.getText());
-            Ciclista c = Ciclista.ciclistas.get(String.valueOf(id));
-            String[] d = this.fecha.getText().split("/");
+            if (Ciclista.ciclistas.get(id) == null){throw new RuntimeException();}
+            String[] d = this.fecha.getText().split("-");
             LocalDate ld = LocalDate.of(Integer.parseInt(d[2]),Integer.parseInt(d[1]),Integer.parseInt(d[0]));
-            Vuelta v1 = new Vuelta(id,ld,1,(Integer)minuto1.getValue(),(Integer)segundo1.getValue());
-            Vuelta v2 = new Vuelta(id,ld,2,(Integer)minuto2.getValue(),(Integer)segundo2.getValue());
-            Vuelta v3 = new Vuelta(id,ld,3,(Integer)minuto3.getValue(),(Integer)segundo3.getValue());
+            int minuto01, minuto02, minuto03, segundo01, segundo02, segundo03;
+            minuto01 = (Integer) minuto1.getValue();
+            minuto02 = (Integer) minuto2.getValue();
+            minuto03 = (Integer) minuto3.getValue();
+            segundo01 = (Integer) segundo1.getValue();
+            segundo02 = (Integer) segundo2.getValue();
+            segundo03 = (Integer) segundo3.getValue();
+            boolean seraAgregado = minuto01+segundo01 !=0 && minuto02+segundo02 != 0 && minuto03+segundo03 != 0;
+            Vuelta v1 = new Vuelta(id,ld,1,minuto01, segundo01);
+            Vuelta v2 = new Vuelta(id,ld,2,minuto02, segundo02);
+            Vuelta v3 = new Vuelta(id,ld,3,minuto03, segundo03);
             Rutina r = new Rutina(ld,id,v1,v2,v3);
-            data.Data.appendVueltas(r.toString()+"\n");
-            int answer = JOptionPane.showConfirmDialog(this, "Datos agregados exitosamente. ¿Desea ingresar a otro ciclista?", "Confirmación", JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE);
-            data.Data.leerVueltas();
-            this.dispose();
-            if (answer == 0){
-                new RegistrarTiempos(frame, true, Integer.parseInt(this.numeroCiclista.getText())+1, this.fecha.getText()).setVisible(true);
+            if (seraAgregado){
+                data.Data.appendVueltas(r.toString()+"\n");
+                data.Data.leerVueltas();
+                int answer = JOptionPane.showConfirmDialog(this, "Datos agregados exitosamente. ¿Desea ingresar a otro ciclista?", "Confirmación", JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE);
+                this.dispose();
+                if (answer == 0){
+                    new RegistrarTiempos(frame, true, data.Data.numeroDeRegistrosPorFecha(fecha.getText())+1, this.fecha.getText()).setVisible(true);
+                }
+            }
+            else {
+                JOptionPane.showMessageDialog(this, "Los datos no han sido agregados, ya que se trata de una jornada incompleta.");
             }
         }
         catch(Exception e){

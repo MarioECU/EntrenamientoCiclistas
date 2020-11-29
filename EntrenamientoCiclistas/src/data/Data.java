@@ -16,31 +16,34 @@ import modelo.Rutina;
  * Almacena métodos necesarios para el manejo de la información y la persistencia de los mismos.
  */
 public class Data {
+    private static Object[] datos;
+    
     /**
      * Carga todos los ciclistas previamente registrados.
-     * @return HashMap cuyo clave es el ID del ciclista y el valor es el objeto de tipo Ciclista.
      */
-    public static HashMap<String, Ciclista> cargarCiclistas(){
-        HashMap<String, Ciclista> ciclistas = null;
+    public static void cargarCiclistas(){
         try {
             try (ObjectInputStream lectorArchivo = new ObjectInputStream(new FileInputStream("src/data/ciclistas.dat"))) {
-                ciclistas = (HashMap<String, Ciclista>) lectorArchivo.readObject();
+                datos = (Object[]) lectorArchivo.readObject();
             }
         }
         catch (IOException | ClassNotFoundException e){
             System.out.println(e.getMessage());
         }
-        return ciclistas;
+        Ciclista.idAtletas = (HashMap<String, Integer>) datos[0];
+        Ciclista.ciclistas = (HashMap<Integer, Ciclista>) datos[1];
     }
     
     /**
      * Actualiza el archivo serializado que contiene la información de los ciclistas.
-     * @param c HashMap actualizado de los ciclistas.
      */
-    public static void actualizarCiclistas(HashMap<String, Ciclista> c){
+    public static void actualizarCiclistas(){
+        datos = new Object[2];
+        datos[0] = Ciclista.idAtletas;
+        datos[1] = Ciclista.ciclistas;
         try {
             try (ObjectOutputStream escritor = new ObjectOutputStream(new FileOutputStream("src/data/ciclistas.dat"))) {
-                escritor.writeObject(c);
+                escritor.writeObject(datos);
             }            
         }
         catch (IOException e) {
@@ -54,6 +57,7 @@ public class Data {
     public static void leerVueltas(){
         try {
             Rutina.rutinas = Files.readAllLines(Paths.get("src/data/ControlEntrenamiento.dat"));
+            Rutina.rutinas.remove(0);
         } 
         catch (IOException ex) {
             System.err.println(ex.getMessage());
@@ -71,5 +75,21 @@ public class Data {
         catch (IOException e) {
             System.out.println(e.getMessage());
         }
+    }
+    
+    /**
+     * Indica la cantidad de registros que se han realizado en una fecha.
+     * @param fecha Fecha cuyos registros serán contados.
+     * @return Número de registros que han realizado para esa fecha.
+     */
+    public static int numeroDeRegistrosPorFecha(String fecha){
+        int counter = 0;
+        for (String linea : Rutina.rutinas){
+            String[] data = linea.split(",");
+            if (data[0].equals(fecha)){
+                counter++;
+            }
+        }
+        return counter;
     }
 }

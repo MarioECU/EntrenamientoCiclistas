@@ -11,7 +11,8 @@ public class Ciclista extends Persona {
     public static final String[] NIVELES = {"Principiante", "Intermedio", "Avanzado", "Elite"}; //Nombres de los niveles de ciclistas.
     public static final int[] MINIMOS = {176, 131, 106, 60}; //Segundos mínimos paralelos a cada nivel.
     public static final int[] MAXIMOS = {239, 175, 130, 105}; //Segundos máximos paralelos a cada nivel.
-    public static HashMap<String, Ciclista> ciclistas; //HashMap que contiene la información de todos los ciclistas registrados hasta el momento.
+    public static HashMap<String, Integer> idAtletas; //HashMap cuya clave es la número de identificación nacional y el valor es el id del atleta.
+    public static HashMap<Integer, Ciclista> ciclistas; //HashMap que contiene la información de todos los ciclistas registrados hasta el momento.
     
     /**
      * Crea un objeto de tipo ciclista
@@ -54,6 +55,9 @@ public class Ciclista extends Persona {
     public void setNivel(int nivel) {
         this.nivel = nivel;
     }
-    
-    
+
+    @Override
+    public String toString() {
+        return super.toString() + "," + idAtleta + "," + nivel;
+    }
 }

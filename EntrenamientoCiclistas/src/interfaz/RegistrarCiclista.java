@@ -5,15 +5,17 @@ import javax.swing.JSpinner;
 import modelo.Ciclista;
 
 public class RegistrarCiclista extends javax.swing.JDialog {
-
+    private final java.awt.Frame frame;
+    
     /**
      * Inicia un nuevo JDialog para Registrar un ciclista.
      */
     public RegistrarCiclista(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
+        frame = parent;
         initComponents();
         this.setTitle("Registrar ciclista");
-        this.setLocationRelativeTo(null);
+        this.setLocationRelativeTo(parent);
         fecha.setEditor(new JSpinner.DateEditor(fecha,"dd/MM/yyyy"));
     }
 
@@ -196,23 +198,39 @@ public class RegistrarCiclista extends javax.swing.JDialog {
      */
     private void guardarButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_guardarButtonActionPerformed
         String[] date = new java.text.SimpleDateFormat("yyyy/MM/dd").format(fecha.getValue()).split("/");
-        boolean repetido = Ciclista.ciclistas.get(idAtleta.getText()) != null;
-        try{
-            Ciclista.ciclistas.put(idAtleta.getText(), new Ciclista(identificacion.getText(),
-                nombre.getText(), apellido.getText(), sexo.getSelectedItem().toString(),
-                Integer.parseInt(date[0]), Integer.parseInt(date[1]), Integer.parseInt(date[2]),
-                Integer.parseInt(idAtleta.getText()), Integer.parseInt(nivelSp.getValue().toString())));
-        if (repetido){
-            JOptionPane.showMessageDialog(this, "El ciclista ");            
+        if (!"".equals(identificacion.getText()) && !"".equals(nombre.getText()) && !"".equals(apellido.getText())){
+            boolean repetido = false;
+            try {
+                repetido = Ciclista.ciclistas.get(Integer.parseInt(idAtleta.getText())) != null || Ciclista.idAtletas.get(identificacion.getText()) != null;
+                Ciclista.idAtletas.putIfAbsent(identificacion.getText(), Integer.parseInt(idAtleta.getText()));
+                Ciclista.ciclistas.putIfAbsent(Integer.parseInt(idAtleta.getText()), new Ciclista(identificacion.getText(),
+                    nombre.getText(), apellido.getText(), sexo.getSelectedItem().toString(),
+                    Integer.parseInt(date[0]), Integer.parseInt(date[1]), Integer.parseInt(date[2]),
+                    Integer.parseInt(idAtleta.getText()), Integer.parseInt(nivelSp.getValue().toString())));
+                if (repetido){
+                    JOptionPane.showMessageDialog(this, "Existen datos repetidos que anteriormente fueron registrados.");
+                    throw new RuntimeException();
+                }
+                int answer = JOptionPane.showConfirmDialog(this, "Ciclista agregado con éxito. ¿Desea revisar la información agregada?", "Confirmación", JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE);
+                if (answer == 0){
+                    System.out.println(identificacion.getText());
+                    new InformacionCiclista(frame, true, Ciclista.ciclistas.get(Integer.parseInt(idAtleta.getText()))).setVisible(true);
+                }
+                this.dispose();
+                int answer2 = JOptionPane.showConfirmDialog(frame, "¿Desea agregar a otro ciclista?", "Confirmación", JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE);
+                if (answer2 == 0){
+                    new RegistrarCiclista(frame, true).setVisible(true);
+                }
+            }
+            catch (Exception e){
+                if (!repetido)
+                    JOptionPane.showMessageDialog(this, "Existen datos erróneos.");
+            }
         }
         else {
-            JOptionPane.showMessageDialog(this, "Ciclista agregado con éxito.");
+            JOptionPane.showMessageDialog(this, "Existen datos incompletos.");
         }
-        this.dispose();
-        }
-        catch (Exception e){
-            JOptionPane.showMessageDialog(this, "No ha sido posible agregar al ciclista.");
-        }
+        
     }//GEN-LAST:event_guardarButtonActionPerformed
 
     private void sexoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sexoActionPerformed

@@ -34,7 +34,7 @@ public class Rutina {
      * @return Si el ciclista, en todas sus vueltas, cumple con los tiempos establecidos por su nivel se retorna 0, caso contratio se retorna 1
      */
     public int cumpleNivel(){
-        int indexNivel = Ciclista.ciclistas.get(String.valueOf(idAtleta)).getNivel()-1;
+        int indexNivel = Ciclista.ciclistas.get(idAtleta).getNivel()-1;
         for (int i = 0; i < 3; i++){
             if (vueltas[i].parseSeconds()< Ciclista.MINIMOS[indexNivel] || vueltas[i].parseSeconds()> Ciclista.MAXIMOS[indexNivel]){
                 return 1;
@@ -45,7 +45,8 @@ public class Rutina {
 
     @Override
     public String toString() {
-        String text = fechaPractica+","+idAtleta+",";
+        String[] f = fechaPractica.toString().split("-");
+        String text = f[2]+"-"+f[1]+"-"+f[0]+","+idAtleta+",";
         for (int i = 0; i < 3; i++){
             text += Vuelta.parseTime(vueltas[i].parseSeconds());
             text += ",";

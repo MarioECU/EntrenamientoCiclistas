@@ -33,6 +33,7 @@ public class Persona implements Serializable {
         this.apellido = apellido;
         this.sexo = sexo;
         nacimiento = LocalDate.of(year, month, day);
+        getEdad();
     }
 
     /**
@@ -43,4 +44,10 @@ public class Persona implements Serializable {
         edad = Period.between(nacimiento, LocalDate.now()).getYears();
         return edad;
     }
+
+    @Override
+    public String toString() {
+        return id + "," + nombre + "," + apellido + "," + sexo + "," + edad + "," + nacimiento;
+    }
+    
 }

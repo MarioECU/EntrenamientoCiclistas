@@ -1,4 +1,4 @@
-package interfaz;
+package com.me.interfaz;
 
 public class InformacionCiclista extends javax.swing.JDialog {
 
@@ -6,7 +6,7 @@ public class InformacionCiclista extends javax.swing.JDialog {
      * Inicia un nuevo JDialog para desplegar información de un ciclista.
      * @param c Objeto de tipo Ciclista del cual se va a desplegar la información.
      */
-    public InformacionCiclista(java.awt.Frame parent, boolean modal, modelo.Ciclista c) {
+    public InformacionCiclista(java.awt.Frame parent, boolean modal, com.me.modelo.Ciclista c) {
         super(parent, modal);
         initComponents();
         this.setLocationRelativeTo(parent);

@@ -1,8 +1,11 @@
-package interfaz;
+package com.me.interfaz;
 
+import com.me.data.Data;
+import java.awt.BorderLayout;
 import java.awt.Color;
-import java.io.IOException;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JLabel;
 
 public class Principal extends javax.swing.JFrame {
 
@@ -10,22 +13,15 @@ public class Principal extends javax.swing.JFrame {
      * Crea el JFrame Principal, inicia sus componentes gráficos y coloca una imagen en el fondo.
      */    
     public Principal() {
-        setContentPane(new javax.swing.JPanel(new java.awt.BorderLayout()) {
-            @Override public void paintComponent(java.awt.Graphics g) {
-                try {
-                    g.drawImage(javax.imageio.ImageIO.read(getClass().getResourceAsStream("/data/fondo.jpg")), 0, 0, null);
-                } catch (IOException ex) {
-                    System.out.println(ex.getMessage());
-                }
-            }
-        });
+        this.setLayout(new BorderLayout());
+        this.setContentPane(new JLabel(new ImageIcon("src/main/resources/com/me/data/fondo.jpg")));
         initComponents();
-        this.setTitle("Menú Principal");
-        this.setLocationRelativeTo(null);
         addHighlight(registrarCiclista);
         addHighlight(registrarPractica);
         addHighlight(visualizarDatos);
         addHighlight(salir);
+        this.setTitle("Menú Principal");
+        this.setLocationRelativeTo(null);
     }
     
     /**
@@ -146,7 +142,7 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_visualizarDatosActionPerformed
 
     private void salirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_salirActionPerformed
-        data.Data.actualizarCiclistas();
+        com.me.data.Data.actualizarCiclistas();
         this.dispose();
     }//GEN-LAST:event_salirActionPerformed
 
@@ -162,7 +158,7 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_formWindowClosed
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
-        data.Data.actualizarCiclistas();
+        com.me.data.Data.actualizarCiclistas();
     }//GEN-LAST:event_formWindowClosing
 
     public static void main(String args[]) {
@@ -189,25 +185,25 @@ public class Principal extends javax.swing.JFrame {
         }
         //</editor-fold>
 
-        data.Data.leerVueltas();
+        Data.leerVueltas();
         /*
         Para limpiar los datos de ciclistas registrados hasta el momento:
-            Comentar la línea 202
-            Descomentar la línea 203
-            Descomentar la línea 204
-            Descomentar la línea 205
+            Comentar la línea 198
+            Descomentar la línea 199
+            Descomentar la línea 200
+            Descomentar la línea 201
             Ejecutar la aplicación y cerrarla
         NO OLVIDAR revertir las líneas modificadas luego
         */
-        data.Data.cargarCiclistas();
-//        modelo.Ciclista.idAtletas = new java.util.HashMap<>();
-//        modelo.Ciclista.ciclistas = new java.util.HashMap<>();
-//        data.Data.actualizarCiclistas();
+//        Data.cargarCiclistas();
+        com.me.modelo.Ciclista.idAtletas = new java.util.HashMap<>();
+        com.me.modelo.Ciclista.ciclistas = new java.util.HashMap<>();
+        Data.actualizarCiclistas();
         java.awt.EventQueue.invokeLater(() -> {
             new Principal().setVisible(true);
         });
     }
-
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton registrarCiclista;
     private javax.swing.JButton registrarPractica;

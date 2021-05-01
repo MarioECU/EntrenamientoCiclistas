@@ -1,4 +1,4 @@
-package modelo;
+package com.me.modelo;
 
 import java.time.LocalDate;
 import java.util.List;

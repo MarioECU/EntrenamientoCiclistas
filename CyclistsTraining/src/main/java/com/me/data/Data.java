@@ -1,4 +1,4 @@
-package data;
+package com.me.data;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -9,8 +9,8 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.HashMap;
-import modelo.Ciclista;
-import modelo.Rutina;
+import com.me.modelo.Ciclista;
+import com.me.modelo.Rutina;
 
 /**
  * Almacena métodos necesarios para el manejo de la información y la persistencia de los mismos.
@@ -23,7 +23,7 @@ public class Data {
      */
     public static void cargarCiclistas(){
         try {
-            try (ObjectInputStream lectorArchivo = new ObjectInputStream(new FileInputStream("src/data/ciclistas.dat"))) {
+            try (ObjectInputStream lectorArchivo = new ObjectInputStream(new FileInputStream("src/main/resources/com/me/data/ciclistas.dat"))) {
                 datos = (Object[]) lectorArchivo.readObject();
             }
         }
@@ -42,7 +42,7 @@ public class Data {
         datos[0] = Ciclista.idAtletas;
         datos[1] = Ciclista.ciclistas;
         try {
-            try (ObjectOutputStream escritor = new ObjectOutputStream(new FileOutputStream("src/data/ciclistas.dat"))) {
+            try (ObjectOutputStream escritor = new ObjectOutputStream(new FileOutputStream("src/main/resources/com/me/data/ciclistas.dat"))) {
                 escritor.writeObject(datos);
             }            
         }
@@ -56,7 +56,7 @@ public class Data {
      */
     public static void leerVueltas(){
         try {
-            Rutina.rutinas = Files.readAllLines(Paths.get("src/data/ControlEntrenamiento.dat"));
+            Rutina.rutinas = Files.readAllLines(Paths.get("src/main/resources/com/me/data/ControlEntrenamiento.dat"));
             Rutina.rutinas.remove(0);
         } 
         catch (IOException ex) {
@@ -70,7 +70,7 @@ public class Data {
      */
     public static void appendVueltas(String line){
         try {
-            Files.write(Paths.get("src/data/ControlEntrenamiento.dat"), line.getBytes(), StandardOpenOption.APPEND);
+            Files.write(Paths.get("src/main/resources/com/me/data/ControlEntrenamiento.dat"), line.getBytes(), StandardOpenOption.APPEND);
         }       
         catch (IOException e) {
             System.out.println(e.getMessage());
@@ -84,12 +84,7 @@ public class Data {
      */
     public static int numeroDeRegistrosPorFecha(String fecha){
         int counter = 0;
-        for (String linea : Rutina.rutinas){
-            String[] data = linea.split(",");
-            if (data[0].equals(fecha)){
-                counter++;
-            }
-        }
+        counter = Rutina.rutinas.stream().map((linea) -> linea.split(",")).filter((data) -> (data[0].equals(fecha))).map((_item) -> 1).reduce(counter, Integer::sum);
         return counter;
     }
 }

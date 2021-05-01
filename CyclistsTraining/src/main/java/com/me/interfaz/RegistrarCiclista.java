@@ -1,8 +1,8 @@
-package interfaz;
+package com.me.interfaz;
 
 import javax.swing.JOptionPane;
 import javax.swing.JSpinner;
-import modelo.Ciclista;
+import com.me.modelo.Ciclista;
 
 public class RegistrarCiclista extends javax.swing.JDialog {
     private final java.awt.Frame frame;
@@ -81,7 +81,7 @@ public class RegistrarCiclista extends javax.swing.JDialog {
 
         guardarButton.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         guardarButton.setText("Guardar");
-        guardarButton.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        guardarButton.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         guardarButton.setSelected(true);
         guardarButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -167,7 +167,6 @@ public class RegistrarCiclista extends javax.swing.JDialog {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel5)
                             .addComponent(sexo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(fecha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))

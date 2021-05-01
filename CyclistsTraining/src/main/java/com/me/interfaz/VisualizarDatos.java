@@ -1,12 +1,12 @@
-package interfaz;
+package com.me.interfaz;
 
 import java.util.Arrays;
 import java.util.Date;
 import javax.swing.JOptionPane;
 import javax.swing.JSpinner;
 import javax.swing.table.DefaultTableModel;
-import modelo.Ciclista;
-import modelo.Rutina;
+import com.me.modelo.Ciclista;
+import com.me.modelo.Rutina;
 
 public class VisualizarDatos extends javax.swing.JDialog {
     private final java.awt.Frame frame;
@@ -49,7 +49,7 @@ public class VisualizarDatos extends javax.swing.JDialog {
 
         visualizarButton.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         visualizarButton.setText("Visualizar reporte");
-        visualizarButton.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        visualizarButton.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         visualizarButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 visualizarButtonActionPerformed(evt);

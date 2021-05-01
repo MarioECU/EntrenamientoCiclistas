@@ -1,4 +1,4 @@
-package interfaz;
+package com.me.interfaz;
 
 import java.util.Date;
 import javax.swing.JSpinner;
@@ -39,7 +39,7 @@ public class RegistrarPractica extends javax.swing.JDialog {
 
         siguienteButton.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         siguienteButton.setText("Siguiente");
-        siguienteButton.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        siguienteButton.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         siguienteButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 siguienteButtonActionPerformed(evt);
@@ -85,7 +85,7 @@ public class RegistrarPractica extends javax.swing.JDialog {
     private void siguienteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_siguienteButtonActionPerformed
         Date d = (Date)fecha.getValue();
         String f = String.valueOf(d.getDate())+"-"+String.valueOf(d.getMonth()+1)+"-"+String.valueOf(d.getYear()+1900)+"";
-        new RegistrarTiempos(frame, true, data.Data.numeroDeRegistrosPorFecha(f)+1, f).setVisible(true);
+        new RegistrarTiempos(frame, true, com.me.data.Data.numeroDeRegistrosPorFecha(f)+1, f).setVisible(true);
         this.dispose();
     }//GEN-LAST:event_siguienteButtonActionPerformed
 

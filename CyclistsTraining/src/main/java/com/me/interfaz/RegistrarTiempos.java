@@ -1,10 +1,10 @@
-package interfaz;
+package com.me.interfaz;
 
 import java.time.LocalDate;
 import javax.swing.JOptionPane;
-import modelo.Ciclista;
-import modelo.Rutina;
-import modelo.Vuelta;
+import com.me.modelo.Ciclista;
+import com.me.modelo.Rutina;
+import com.me.modelo.Vuelta;
 
 public class RegistrarTiempos extends javax.swing.JDialog {
     private final java.awt.Frame frame;
@@ -208,7 +208,7 @@ public class RegistrarTiempos extends javax.swing.JDialog {
         );
 
         guardarButton.setText("Guardar");
-        guardarButton.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        guardarButton.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         guardarButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 guardarButtonActionPerformed(evt);
@@ -405,12 +405,12 @@ public class RegistrarTiempos extends javax.swing.JDialog {
             Vuelta v3 = new Vuelta(id,ld,3,minuto03, segundo03);
             Rutina r = new Rutina(ld,id,v1,v2,v3);
             if (seraAgregado){
-                data.Data.appendVueltas(r.toString()+"\n");
-                data.Data.leerVueltas();
+                com.me.data.Data.appendVueltas(r.toString()+"\n");
+                com.me.data.Data.leerVueltas();
                 int answer = JOptionPane.showConfirmDialog(this, "Datos agregados exitosamente. ¿Desea ingresar a otro ciclista?", "Confirmación", JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE);
                 this.dispose();
                 if (answer == 0){
-                    new RegistrarTiempos(frame, true, data.Data.numeroDeRegistrosPorFecha(fecha.getText())+1, this.fecha.getText()).setVisible(true);
+                    new RegistrarTiempos(frame, true, com.me.data.Data.numeroDeRegistrosPorFecha(fecha.getText())+1, this.fecha.getText()).setVisible(true);
                 }
             }
             else {
